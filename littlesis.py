@@ -3,6 +3,7 @@ import json,urllib2,gzip
 from StringIO import StringIO
 
 class LittleSis(object):
+  """ The base LittleSis Object"""
   def __init__(self,key):
     self.key=key
     self.api="http://api.littlesis.org/"
@@ -34,6 +35,7 @@ class LittleSis(object):
     return List(id,self.key)
 
 class LittleSisObject(LittleSis):
+  """ A instance of a Little Sis object (has an ID) """
   def __init__(self,id,key,data=None):
     self.id=id
     super(LittleSisObject,self).__init__(key)
@@ -50,22 +52,27 @@ class LittleSisObject(LittleSis):
     return (self.id==other.id & self.type==other.type)
 
 class Entity(LittleSisObject):
+  """ An Entity Object """
   type="Entity"
 
   @property
   def details(self):
+    """ get the details of the entity """
     return self.request("/details.json")["Response"]["Data"]["Entity"]
 
   @property
-  def aliases(self):
+  def aliases(self):  
+    """ get aliases of the entity """
     return self.request("/aliases.json")["Response"]["Data"]["Entity"]["Aliases"]["Alias"]
 
   @property
   def relationships(self):
+    """ get relationships for this entity """
     return [Relationship(int(i["id"]),self.key) for i in self.request("/relationships.json")["Response"]["Data"]["Relationships"]["Relationship"]]
 
   @property
   def related(self):  
+    """ get related entities """
     return [Entity(int(i["id"]),self.key) for i in
     self.request("/related.json")["Response"]["Data"]["RelatedEntities"]["Entity"]]
   
