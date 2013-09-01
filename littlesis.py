@@ -47,7 +47,7 @@ class LittleSisObject(LittleSis):
     return self.attributes[name]
 
   def __eq__(self,other):
-    return self.id==other.id
+    return (self.id==other.id & self.type==other.type)
 
 class Entity(LittleSisObject):
   type="Entity"
