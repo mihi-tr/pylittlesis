@@ -60,17 +60,28 @@ class Entity(LittleSisObject):
   @property
   def relationships(self):
     return [Relationship(int(i["id"]),self.key) for i in self.request("/relationships.json")["Response"]["Data"]["Relationships"]["Relationship"]]
-    
+  
+  def __repr__(self):
+    return u"LittleSis Entity: %d (%s)"%(self.id,self.name)
+
+  def __str__(self):
+    return self.name
+
 
 class Relationship(LittleSisObject):
   type="Relationship"
   
   @property
   def entity1(self):
-    return Entity(int(self.Entity1["id"]),self.key)
-
+    return Entity(int(self.Entity1["id"]),self.key,data=self.Entity1)
+  
+  @property
   def entity2(self):
-    return Entity(int(self.Entity2["id"]),self.key)
+    return Entity(int(self.Entity2["id"]),self.key,data=self.Entity2)
+
+  def __repr__(self):
+    return u"LittleSis Relationship: %d (%s - %s - %s)"%(self.id,
+      self.Entity1["name"],self.description1,self.Entity2["name"])
     
 class List(LittleSisObject):
   type="List"
