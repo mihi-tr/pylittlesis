@@ -73,7 +73,7 @@ class Entity(LittleSisObject):
   @property
   def related(self):  
     """ get related entities """
-    return [Entity(int(i["id"],self.key,data=i) for i in
+    return [Entity(int(i["id"]),self.key,data=i) for i in
     self.request("/related.json")["Response"]["Data"]["RelatedEntities"]["Entity"]]
   
   def __repr__(self):
