@@ -46,6 +46,9 @@ class LittleSisObject(LittleSis):
   def __getattr__(self,name):
     return self.attributes[name]
 
+  def __eq__(self,other):
+    return self.id==other.id
+
 class Entity(LittleSisObject):
   type="Entity"
 
