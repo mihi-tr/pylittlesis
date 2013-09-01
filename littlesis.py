@@ -80,7 +80,15 @@ class Entity(LittleSisObject):
     if type(r)!=list:
       r=[r]
     return [Entity(int(i["id"]),self.key,data=i) for i in r]
-  
+ 
+  @property
+  def lists(self):
+    """get the lists the entity belongs to """
+    r=self.request("/lists.json")["Response"]["Data"]["Lists"]["List"]
+    if type(r)!=list:
+      r=[r]
+    return [List(int(i["id"]),self.key,data=i) for i in r]
+
   def __repr__(self):
     return u"LittleSis Entity: %d (%s)"%(self.id,self.name)
 
@@ -89,14 +97,17 @@ class Entity(LittleSisObject):
 
 
 class Relationship(LittleSisObject):
+  """ A relationship Object """
   type="Relationship"
   
   @property
   def entity1(self):
+    """ Get the Entity Object of Entity1"""
     return Entity(int(self.Entity1["id"]),self.key,data=self.Entity1)
   
   @property
   def entity2(self):
+    """ Get the Entity Object of Entity2 """
     return Entity(int(self.Entity2["id"]),self.key,data=self.Entity2)
 
   def __repr__(self):
