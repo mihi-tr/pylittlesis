@@ -1,5 +1,6 @@
 '''littlesis - a python wrapper for the littlesis.org api'''
-import json,urllib2
+import json,urllib2,gzip
+from StringIO import StringIO
 
 class LittleSis(object):
   def __init__(self,key):
@@ -13,8 +14,15 @@ class LittleSis(object):
       p=""
     url="%s%s?_key=%s%s"%(self.api,path,self.key,p)
     r=urllib2.Request(url,headers={"User-Agent":
-      "Mozilla/5.0 (X11; Linux x86)"})
-    return json.loads(urllib2.urlopen(r).read())
+      "Mozilla/5.0 (X11; Linux x86)",
+      "Accept-encoding":"gzip"})
+    response=urllib2.urlopen(r)
+    if response.info().get('Content-Encoding') == 'gzip':
+      buf=StringIO(response.read())
+      f=gzip.GzipFile(fileobj=buf)
+    else:
+      f=response
+    return json.loads(f.read())
 
   def entity(self,id):
     return Entity(id,self.key)
