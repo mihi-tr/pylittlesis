@@ -63,6 +63,11 @@ class Entity(LittleSisObject):
   @property
   def relationships(self):
     return [Relationship(int(i["id"]),self.key) for i in self.request("/relationships.json")["Response"]["Data"]["Relationships"]["Relationship"]]
+
+  @property
+  def related(self):  
+    return [Entity(int(i["id"]),self.key) for i in
+    self.request("/related.json")["Response"]["Data"]["RelatedEntities"]["Entity"]]
   
   def __repr__(self):
     return u"LittleSis Entity: %d (%s)"%(self.id,self.name)
