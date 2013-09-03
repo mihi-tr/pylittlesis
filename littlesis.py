@@ -28,6 +28,13 @@ class LittleSis(object):
   def entity(self,id):
     return Entity(id,self.key)
 
+  def entities(self,q):
+    """entity search"""
+    r=self.request("/entities.json",{"q":q})["Response"]["Data"]["Entities"]["Entity"]
+    if type(r)!=list:
+      r=[r]
+    return [Entity(int(i["id"]),self.key,data=i) for i in r]
+
   def relationship(self,id):
     return Relationship(id,self.key)
 
