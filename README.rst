@@ -1,7 +1,11 @@
 pylittlesis
 ===========
 
-A python library wrapping the Little Sister API...
+`LittleSis`_ is a free database of who-knows-who in US Business and
+Government. It provides an API to facilitate development of additional
+plugins. This is a python wrapper to wrap the API into python objects.
+
+.. _LittleSis: http://littlesis.org
 
 installation
 ------------

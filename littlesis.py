@@ -16,12 +16,28 @@ import json,urllib2,gzip
 from StringIO import StringIO
 
 class LittleSis(object):
-  """ The base LittleSis Object"""
+  """ The base LittleSis Object
+  use this to establish your API key::
+    
+    ls=LittleSis(key)
+  
+  then use it to search for entities, access entities, relationships or
+  lists by id::
+
+    e=ls.entity(1)
+    print e.name
+    """
+
   def __init__(self,key):
     self.key=key
     self.api="http://api.littlesis.org/"
 
   def request(self,path,params=None):
+    """ Send a request to the API 
+
+    params is an optional dictionary of parameters to be passed to the API
+    - please refer to the API documentation for further information of the
+      parameters you might need """
     if params:
       p="&%s"%"&".join(("%s=%s"%x for x in params.items()))
     else:
@@ -39,23 +55,28 @@ class LittleSis(object):
     return json.loads(f.read())
 
   def entity(self,id):
+    """ return an Entitiy for the given id """
     return Entity(id,self.key)
 
   def entities(self,q):
-    """entity search"""
+    """Search for entities with the given term(s) - returns a list of
+    entities"""
     r=self.request("/entities.json",{"q":q})["Response"]["Data"]["Entities"]["Entity"]
     if type(r)!=list:
       r=[r]
     return [Entity(int(i["id"]),self.key,data=i) for i in r]
 
   def relationship(self,id):
+    """ returns a Relationshio with the given id """
     return Relationship(id,self.key)
 
   def list(self,id):
+    """ returns a list with the given id """
     return List(id,self.key)
 
 class LittleSisObject(LittleSis):
-  """ A instance of a Little Sis object (has an ID) """
+  """ A instance of a Little Sis object (has an ID) - this is mainly used
+  for common functions of Entity, List and Relationship"""
   def __init__(self,id,key,data=None):
     self.id=id
     super(LittleSisObject,self).__init__(key)
@@ -72,7 +93,13 @@ class LittleSisObject(LittleSis):
     return (self.id==other.id & self.type==other.type)
 
 class Entity(LittleSisObject):
-  """ An Entity Object """
+  """ An Entity Object - an entity in the LittleSis database. Entities are
+  either Organizations or Persons. Initialize using id and key (optionally
+  you can pass in a data dictionary of the Entities attributes).
+  
+  However, it is recommended to bootstrap entities from the LittleSis
+  object, containing your key (use entity(id) or entities("search term")).
+  """
   type="Entity"
 
   @property
