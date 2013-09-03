@@ -1,4 +1,17 @@
-'''littlesis - a python wrapper for the littlesis.org api'''
+'''littlesis - a python wrapper for the littlesis.org api
+
+This module wraps the littlesis API - please note that you will need a API
+key for the littlesis API. 
+
+usage::
+
+  from littlesis import LittleSis
+
+  ls=LittleSis("YOURKEY")
+  e=ls.entity(1)
+  print e.details
+
+'''
 import json,urllib2,gzip
 from StringIO import StringIO
 
